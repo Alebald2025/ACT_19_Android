@@ -28,7 +28,7 @@ class Act2Activity : AppCompatActivity() {
                         loadPostAndComments(postId)
                     }
                 } catch (e: Exception) {
-                    // ID no vàlid
+                    // ID no valido
                 }
             }
         }
@@ -36,7 +36,7 @@ class Act2Activity : AppCompatActivity() {
 
     private fun loadPostAndComments(postId: Int) {
 
-        // Carregar Post
+        // Cargar Post
         RetrofitClient.instance.getPostById(postId).enqueue(object : Callback<Post> {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (response.isSuccessful) {
@@ -51,7 +51,7 @@ class Act2Activity : AppCompatActivity() {
             }
         })
 
-        // Carregar Comentaris
+        // Cargar Comentarios
         RetrofitClient.instance.getComments(postId).enqueue(object : Callback<List<Comment>> {
             override fun onResponse(call: Call<List<Comment>>, response: Response<List<Comment>>) {
                 if (response.isSuccessful) {

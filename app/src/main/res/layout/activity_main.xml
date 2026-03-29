@@ -10,13 +10,15 @@
         android:id="@+id/btnAct1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Act1: Llista de 100 Posts"
-        android:layout_marginBottom="24dp" />
+        android:text="Act1: Lista de 100 posts"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#FF8EC100" />
 
     <Button
         android:id="@+id/btnAct2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Act2: Veure Post + Comentaris" />
+        android:text="Act2: Post + Comentarios"
+        android:backgroundTint="#FF8EC100" />
 
 </LinearLayout>
