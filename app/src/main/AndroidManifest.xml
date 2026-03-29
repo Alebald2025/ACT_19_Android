@@ -15,6 +15,13 @@
         android:theme="@style/Theme.ACT_19_Android_Alejandro"
         tools:targetApi="31">
         <activity
+            android:name=".CommentAdapter"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".PostAdapter"
             android:exported="false">
             <meta-data
@@ -29,7 +36,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Lista"
+            android:name=".Act1Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

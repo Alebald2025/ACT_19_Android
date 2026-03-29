@@ -2,10 +2,11 @@ package com.example.act_19_android_alejandro
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.act_19_android_alejandro.databinding.ActivityAct2Binding
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Act2Activity : AppCompatActivity() {
 
@@ -26,7 +27,7 @@ class Act2Activity : AppCompatActivity() {
                     if (postId in 1..100) {
                         loadPostAndComments(postId)
                     }
-                } catch (e: NumberFormatException) {
+                } catch (e: Exception) {
                     // ID no vàlid
                 }
             }
@@ -34,26 +35,35 @@ class Act2Activity : AppCompatActivity() {
     }
 
     private fun loadPostAndComments(postId: Int) {
-        lifecycleScope.launch {
-            try {
-                // Carregar Post
-                val postResponse = RetrofitClient.instance.getPostById(postId)
-                if (postResponse.isSuccessful) {
-                    val post = postResponse.body()
+
+        // Carregar Post
+        RetrofitClient.instance.getPostById(postId).enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (response.isSuccessful) {
+                    val post = response.body()
                     binding.tvPostTitle.text = post?.title ?: "Sense títol"
                     binding.tvPostBody.text = post?.body ?: "Sense contingut"
                 }
+            }
 
-                // Carregar Comentaris
-                val commentsResponse = RetrofitClient.instance.getComments(postId)
-                if (commentsResponse.isSuccessful) {
-                    val comments = commentsResponse.body() ?: emptyList()
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+
+        // Carregar Comentaris
+        RetrofitClient.instance.getComments(postId).enqueue(object : Callback<List<Comment>> {
+            override fun onResponse(call: Call<List<Comment>>, response: Response<List<Comment>>) {
+                if (response.isSuccessful) {
+                    val comments = response.body() ?: emptyList()
                     val adapter = CommentAdapter(comments)
                     binding.recyclerViewComments.adapter = adapter
                 }
-            } catch (e: Exception) {
-                // Error (pots afegir un Toast si vols)
             }
-        }
+
+            override fun onFailure(call: Call<List<Comment>>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 }

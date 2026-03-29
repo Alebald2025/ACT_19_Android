@@ -2,12 +2,11 @@ package com.example.act_19_android_alejandro
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.act_19_android_alejandro.databinding.ActivityAct1Binding
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Act1Activity : AppCompatActivity() {
 
@@ -20,19 +19,18 @@ class Act1Activity : AppCompatActivity() {
 
         binding.recyclerViewPosts.layoutManager = LinearLayoutManager(this)
 
-        lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.instance.getPosts()
+        RetrofitClient.instance.getPosts().enqueue(object : Callback<List<Post>> {
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                 if (response.isSuccessful) {
                     val posts = response.body() ?: emptyList()
                     val adapter = PostAdapter(posts)
                     binding.recyclerViewPosts.adapter = adapter
                 }
-            } catch (e: IOException) {
-                // Error de connexió
-            } catch (e: HttpException) {
-                // Error del servidor
             }
-        }
+
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 }
